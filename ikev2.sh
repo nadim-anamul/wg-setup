@@ -52,12 +52,12 @@ echo "Backups created: ${up_script}.bak and ${down_script}.bak"
 
 # Modify ipsec-connection-up.sh
 sed -i '/^domain=/a server_table_name="$5"' "$up_script" # Add server_table_name variable
-sed -i 's/DATA="\(.*\)"/DATA="\1&server_table_name=$server_table_name"/' "$up_script" # Include in API call
+sed -i 's|^DATA=.*|DATA="ip=$ip&user_name=$user_name&client_ip=$client_ip&domain=$domain&server_table_name=$server_table_name"|' "$up_script" # Correctly set DATA variable
 echo "Modified $up_script to include server_table_name."
 
 # Modify ipsec-connection-down.sh
 sed -i '/^user_name=/a server_table_name="$3"' "$down_script" # Add server_table_name variable
-sed -i 's/DATA="\(.*\)"/DATA="\1&server_table_name=$server_table_name"/' "$down_script" # Include in API call
+sed -i 's|^DATA=.*|DATA="ip=$ip&user_name=$user_name&server_table_name=$server_table_name"|' "$down_script" # Correctly set DATA variable
 echo "Modified $down_script to include server_table_name."
 
 # Confirm changes
